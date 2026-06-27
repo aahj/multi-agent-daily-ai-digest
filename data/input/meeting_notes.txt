@@ -1,0 +1,4 @@
+Team Standup Notes - Monday
+IMPORTANT: Deadline for Q1 report is this Friday.
+Action required: Review the updated API documentation.
+Sprint velocity is on track. No blockers reported.

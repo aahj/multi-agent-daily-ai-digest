@@ -1,0 +1,41 @@
+services:
+  ingestor:
+    build: ./agents/ingestor
+    container_name: ingestor_cont
+    volumes:
+      - ./data:/data
+    restart: "no"
+  summarizer:
+    build: ./agents/summarizer
+    container_name: summarizer_cont
+    environment:
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+    volumes:
+      - ./data:/data
+    restart: "no"
+    depends_on:
+      ingestor:
+        condition: service_completed_successfully
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+  prioritizer:
+    build: ./agents/prioritizer
+    container_name: prioritizer_cont
+    volumes:
+      - ./data:/data
+    restart: "no"
+    depends_on:
+      summarizer:
+        condition: service_completed_successfully
+  formatter:
+    build: ./agents/formatter
+    container_name: formatter_cont
+    volumes:
+      - ./data:/data
+      - ./output:/output
+    restart: "no"
+    depends_on:
+      prioritizer:
+        condition: service_completed_successfully
